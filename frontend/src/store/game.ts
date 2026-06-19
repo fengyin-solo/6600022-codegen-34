@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import type { BoardState, Move, GameRecord, AIConfig, GameStatus } from '../types';
+import { usePracticeStore } from './practice';
 
 const BOARD_SIZE = 15;
 const EMPTY = 0;
@@ -270,6 +271,9 @@ export const useGameStore = defineStore('game', () => {
       duration: moves.value.length > 0 ? moves.value[moves.value.length - 1].timestamp - moves.value[0].timestamp : 0,
     };
     gameRecords.value.unshift(record);
+
+    const practiceStore = usePracticeStore();
+    practiceStore.recordGameResult(winner.value);
   }
 
   function startReplay(record: GameRecord) {
